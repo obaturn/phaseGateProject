@@ -1,0 +1,160 @@
+.app {
+    background-color: #d8f3dc;
+}
+
+.menu {
+    display: flex;
+}
+
+.list {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #b7e4c7;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #17050b; /* Changed text color to deep red */
+}
+
+.header ul {
+    display: flex;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.header li {
+    margin-right: 30px;
+    margin-top: 0;
+    color: #0e0a0e;
+    padding: 10px 15px;
+    background-color: white;
+    border-radius: 5px;
+}
+
+.header li:hover {
+    background-color: #f0a5a5;
+}
+
+.registerSection {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.formImage {
+    margin-right: 40px;
+}
+
+.registerPlace {
+    padding: 20px 40px;
+    font-size: 14px;
+    border: 2px solid #52b788;
+    background-color: #b7e4c7;
+    color: #1b4332;
+    border-radius: 10px;
+    flex-grow: 1;
+}
+
+.regis:hover {
+    background-color: white;
+    color: #1b4332;
+    border-color: #52b788;
+}
+
+body {
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    background-color: #d8f3dc;
+}
+
+.container {
+    max-width: 700px;
+    width: 100%;
+    background-color: #b7e4c7;
+    padding: 20px 30px;
+    border-radius: 10px;
+}
+
+.containerSupport {
+    font-size: 25px;
+    font-weight: bold;
+    position: relative;
+    color: #1b4332;
+}
+
+.containerSupport::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 3px;
+    width: 3px;
+    background-color: #1b4332;
+}
+
+.userRegistration {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.userDetails {
+    margin: 20px 0 12px 0;
+    width: calc(100% / 2 - 20px);
+}
+
+.userDetails input,
+.userDetails select {
+    height: 60px;
+    width: 100%;
+    outline: none;
+    border-radius: 10px;
+    border: 1px solid #52b788;
+    padding-left: 20px;
+    font-size: 16px;
+    border-bottom-width: 2px;
+    transition: border-color 0.3s;
+}
+
+.userDetails input:focus,
+.userDetails input:valid {
+    border-color: darkgrey;
+}
+
+.submitPlace input {
+    height: 60px;
+    width: 100%;
+    background-color: #52b788;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.submitPlace input:hover {
+    background-color: white;
+    color: #52b788;
+}
+
+@media (max-width: 768px) {
+    .registerSection {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
+
+    .formImage {
+        margin-bottom: 20px;
+    }
+
+    .registerPlace {
+        width: 100%;
+    }
+}
