@@ -1,9 +1,9 @@
 package com.africa.semicolon.Services;
 
-import com.africa.semicolon.Data.repository.ContactRepository;
+import com.africa.semicolon.Data.model.User;
 import com.africa.semicolon.Data.repository.UserRepository;
 import com.africa.semicolon.Dto.CustomerRequest.AddContactRequest;
-import com.africa.semicolon.Dto.UserRequest.UserFindByIdRequest;
+import com.africa.semicolon.Dto.UserRequest.UserFindByEmailRequest;
 import com.africa.semicolon.Dto.UserRequest.UserLoginRequest;
 import com.africa.semicolon.Dto.UserRequest.UserRegisterRequest;
 import com.africa.semicolon.Dto.UserRequest.UserUpdateRequest;
@@ -19,43 +19,45 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserServicesImplementationTest {
 @Autowired
 private UserServicesImplementation userServicesImplementation;
+@Autowired
+private UserRepository userRepository;
 
     @Test
     public void testThatICanRegisterAUser() {
         UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
-        userRegisterRequest.setFirstName("Tolu");
-        userRegisterRequest.setLastName("Obaturn");
-        userRegisterRequest.setPhoneNumber("08026554250");
-        userRegisterRequest.setEmail("obaturn@gmail.com");
-        userRegisterRequest.setPassword("123456");
-        userRegisterRequest.setUserName("obasco");
+        userRegisterRequest.setFirstName("Totm");
+        userRegisterRequest.setLastName("Oma");
+        userRegisterRequest.setPhoneNumber("08246554250");
+        userRegisterRequest.setEmail("obaturna@gmail.com");
+        userRegisterRequest.setPassword("123435");
+        userRegisterRequest.setUsername("oban");
         UserRegisterResponse response = userServicesImplementation.registerUser(userRegisterRequest);
         assertNotNull(response, "Response is successfully");
         assertThat(response.getMessage()).isEqualTo(" you have been successfully registered");
-     assertThat(response.getUserName()).isEqualTo(userRegisterRequest.getUserName());
+     assertThat(response.getUserName()).isEqualTo(userRegisterRequest.getUsername());
 
 
     }
 
     @Test
-    public void testThatICanFindUserById() {
+    public void testThatICanFindUserByEmail() {
         UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
         userRegisterRequest.setFirstName("Tolu");
         userRegisterRequest.setLastName("Obaturn");
         userRegisterRequest.setPhoneNumber("08026554250");
         userRegisterRequest.setEmail("obaturn@gmail.com");
         userRegisterRequest.setPassword("123456");
-        userRegisterRequest.setUserName("obasco");
+        userRegisterRequest.setUsername("obasco");
         UserRegisterResponse registerResponse = userServicesImplementation.registerUser(userRegisterRequest);
         assertNotNull(registerResponse, "you have been registered");
-        UserFindByIdRequest findByIdRequest = new UserFindByIdRequest();
-        findByIdRequest.setId(registerResponse.getUser_id());
-        assertThat(findByIdRequest.getId()).isEqualTo(registerResponse.getUser_id());
-        UserFindByIdResponse response = new UserFindByIdResponse();
-        response.setMessage(findByIdRequest.getId());
+        UserFindByEmailRequest userFindByEmailRequestRequest = new UserFindByEmailRequest();
+        userFindByEmailRequestRequest.setEmail(registerResponse.getEmail());
+        assertThat(userFindByEmailRequestRequest.getEmail()).isEqualTo(registerResponse.getEmail());
+        UserFindByEmailResponse response = new UserFindByEmailResponse();
+        response.setMessage(userFindByEmailRequestRequest.getEmail());
         assertThat(registerResponse.getMessage()).isEqualTo(" you have been successfully registered");
-        assertNotNull(registerResponse.getUser_id(), "User found with Id\"+userFindByIdRequest.getId()");
-        assertThat(findByIdRequest.getId().equals(registerResponse.getUser_id())).isTrue();
+        assertNotNull(registerResponse.getEmail(), "user found with email\"+user.get().getEmail()");
+
 
     }
 
@@ -67,7 +69,7 @@ private UserServicesImplementation userServicesImplementation;
         userRegisterRequest.setPhoneNumber("08028554250");
         userRegisterRequest.setEmail("akin@gmail.com");
         userRegisterRequest.setPassword("123456");
-        userRegisterRequest.setUserName("emmanuel2901");
+        userRegisterRequest.setUsername("emmanuel2901");
         UserRegisterResponse registerResponse = userServicesImplementation.registerUser(userRegisterRequest);
         assertThat(registerResponse.getMessage()).isEqualTo(" you have been successfully registered");
 
@@ -82,18 +84,18 @@ private UserServicesImplementation userServicesImplementation;
     @Test
     public void testThatMyUserCanUpdate() {
         UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
-        userRegisterRequest.setFirstName("arife");
-        userRegisterRequest.setLastName("ope");
-        userRegisterRequest.setPhoneNumber("08026554250");
+        userRegisterRequest.setFirstName("ari");
+        userRegisterRequest.setLastName("opeyemi");
+        userRegisterRequest.setPhoneNumber("08026554251");
         userRegisterRequest.setEmail("ireoluwa@gmail.com");
-        userRegisterRequest.setPassword("123456");
-        userRegisterRequest.setUserName("john567");
+        userRegisterRequest.setPassword("123455");
+        userRegisterRequest.setUsername("john5671");
         UserRegisterResponse registerResponse = userServicesImplementation.registerUser(userRegisterRequest);
         assertThat(registerResponse.getMessage()).isEqualTo(" you have been successfully registered");
         UserUpdateRequest updateRequest = new UserUpdateRequest();
-        updateRequest.setUpdateId(registerResponse.getUser_id());
-        updateRequest.setFirstName("Toluwalase");
-        updateRequest.setLastName("Emmanuel");
+        updateRequest.setUpdateId(registerResponse.getEmail());
+        updateRequest.setFirstName("Tolu");
+        updateRequest.setLastName("abimbola");
         updateRequest.setPhoneNumber("08104375142");
         UserUpdateResponse updateResponse = userServicesImplementation.updateUser(updateRequest);
         assertThat(updateResponse.getMessage()).isEqualTo("user updated successfully");
@@ -103,13 +105,18 @@ private UserServicesImplementation userServicesImplementation;
     @Test
     public void test_That_A_User_Cant_AddContact_With_The_Same_PhoneNumber() {
         AddContactRequest addContactRequest = new AddContactRequest();
-        addContactRequest.setFirstName("oba");
-        addContactRequest.setLastName("Obaturn");
-        addContactRequest.setPhoneNumber("08127554352");
-        addContactRequest.setFirstName("oba");
-        addContactRequest.setLastName("Obaturn");
-        addContactRequest.setPhoneNumber("08127554352");
-        assertThrows(UserAlreadyExistException.class, ()->userServicesImplementation.userCannotAddAContactWithTheSamePhoneNumber(addContactRequest));
+        addContactRequest.setFirstName("obaturn");
+        addContactRequest.setLastName("ibro");
+        addContactRequest.setPhoneNumber("08127554342");
+
+        User existingUser = new User();
+        existingUser.setFirstName("obaturn");
+        existingUser.setLastName("ibro");
+        existingUser.setPhoneNumber("08127554342");
+        userRepository.save(existingUser);
+
+        assertThrows(UserAlreadyExistException.class, () -> {userServicesImplementation.userCannotAddAContactWithTheSamePhoneNumber(addContactRequest);
+        });
 
     }
 

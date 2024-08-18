@@ -33,7 +33,7 @@ public class ContactController {
     @GetMapping("findContacts")
     public ResponseEntity<?> findContacts(@RequestBody FindContactRequest findContactRequest) {
         try {
-            FindContactResponse response = contactService.findContact(findContactRequest);
+            FindContactResponse response = contactService.findContacts(findContactRequest);
             return  new ResponseEntity<>(new ApiResponse(true,response),FOUND);
         }catch (Exception e){
             return new ResponseEntity<>(new ApiResponse(false,e.getMessage()),NOT_FOUND);
@@ -49,7 +49,7 @@ public class ContactController {
         return new ResponseEntity<>(new ApiResponse(false,e.getMessage()),NO_CONTENT);
         }
     }
-    @PostMapping("editContact")
+    @PatchMapping("editContact")
    public ResponseEntity<?> editContact(@RequestBody EditContactRequest editContactRequest) {
         try{
         return new ResponseEntity<>(new ApiResponse(true,contactService.editContact(editContactRequest)),NO_CONTENT);
@@ -58,6 +58,23 @@ public class ContactController {
             return new ResponseEntity<>(new ApiResponse(false,e.getMessage()),NOT_FOUND);
         }
     }
+    @GetMapping("getAllTheFirstName")
+    public ResponseEntity<?> getAllTheFirstName(@RequestBody String firstName) {
+        try{
+            return new ResponseEntity<>(new ApiResponse(true,contactService.getAllTheFirstName(firstName)),CREATED);
 
+        }catch (Exception e){
+            return new ResponseEntity<>(new ApiResponse(false,e.getMessage()),NOT_FOUND);
+        }
+        
+    }
+    @GetMapping("getAllTheLastName")
+    public ResponseEntity<?> getAllTheLastName(@RequestBody String lastName) {
+        try{
+            return new ResponseEntity<>(new ApiResponse(true,contactService.getAllTheLastName(lastName)),CREATED);
+        }catch (Exception e){
+            return new ResponseEntity<>(new ApiResponse(false,e.getMessage()),NOT_FOUND);
+        }
+    }
 
 }

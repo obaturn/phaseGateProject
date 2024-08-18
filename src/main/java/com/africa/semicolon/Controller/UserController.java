@@ -1,13 +1,12 @@
 package com.africa.semicolon.Controller;
 
-import com.africa.semicolon.Data.model.User;
 import com.africa.semicolon.Dto.CustomerRequest.AddContactRequest;
 import com.africa.semicolon.Dto.CustomerResponse.ApiResponse;
-import com.africa.semicolon.Dto.UserRequest.UserFindByIdRequest;
+import com.africa.semicolon.Dto.UserRequest.UserFindByEmailRequest;
 import com.africa.semicolon.Dto.UserRequest.UserLoginRequest;
 import com.africa.semicolon.Dto.UserRequest.UserRegisterRequest;
 import com.africa.semicolon.Dto.UserRequest.UserUpdateRequest;
-import com.africa.semicolon.Dto.UserResponse.UserFindByIdResponse;
+import com.africa.semicolon.Dto.UserResponse.UserFindByEmailResponse;
 import com.africa.semicolon.Dto.UserResponse.UserLoginResponse;
 import com.africa.semicolon.Dto.UserResponse.UserRegisterResponse;
 import com.africa.semicolon.Dto.UserResponse.UserUpdateResponse;
@@ -19,6 +18,9 @@ import org.springframework.web.bind.annotation.*;
 import static org.springframework.http.HttpStatus.*;
 
 @RestController
+
+
+@CrossOrigin(origins = "*")
 @RequestMapping("api/v1")
 public class UserController {
     @Autowired
@@ -34,9 +36,9 @@ public class UserController {
     }
   }
   @GetMapping("/userFindById")
-    public ResponseEntity<?> userFindById(@RequestBody UserFindByIdRequest  findId) {
+    public ResponseEntity<?> userFindByEmail(@RequestBody UserFindByEmailRequest emailRequest) {
     try{
-      UserFindByIdResponse response = userService.userFindById(findId);
+      UserFindByEmailResponse response = userService.userFindByEmail(emailRequest);
       return new ResponseEntity<>(new ApiResponse(true,response),FOUND);
 
   }catch (Exception e){
@@ -71,5 +73,6 @@ public class UserController {
         return new ResponseEntity<>(new ApiResponse(false,e.getMessage()),REQUEST_TIMEOUT);
     }
   }
+
 
 }

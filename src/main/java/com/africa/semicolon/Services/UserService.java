@@ -8,10 +8,12 @@ import com.africa.semicolon.Dto.UserResponse.UserRegisterResponse;
 
 public interface UserService {
     UserRegisterResponse registerUser(UserRegisterRequest registrationUser);
-    UserFindByIdResponse userFindById(UserFindByIdRequest userFindById);
+    UserFindByEmailResponse userFindByEmail(UserFindByEmailRequest userFindById);
+
     UserLoginResponse userLogin(UserLoginRequest login);
     UserUpdateResponse updateUser(UserUpdateRequest updateUser);
     UserAddContactResponse userCannotAddAContactWithTheSamePhoneNumber(AddContactRequest addingContact);
     UserAddContactResponse addContactByUser(AddContactRequest addContact);
+
 
 }

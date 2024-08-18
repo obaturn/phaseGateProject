@@ -9,10 +9,15 @@ import com.africa.semicolon.Dto.CustomerResponse.DeleteContactResponse;
 import com.africa.semicolon.Dto.CustomerResponse.EditContactResponse;
 import com.africa.semicolon.Dto.CustomerResponse.FindContactResponse;
 
+import java.util.List;
+
 public interface ContactService {
     AddContactResponse createContact(AddContactRequest addContactRequest);
     EditContactResponse editContact(EditContactRequest edit);
-    FindContactResponse findContact(FindContactRequest findContactRequest);
+    FindContactResponse findContacts(FindContactRequest findContactRequest);
     DeleteContactResponse deleteContact(DeleteContactRequest delete);
+    List<Contact> getAllTheFirstName(String firstName);
+    List<Contact> getAllTheLastName(String lastName);
+    void duplicateFirstNameAndLastName(AddContactRequest addContactRequest);
 
 }

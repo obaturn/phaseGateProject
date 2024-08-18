@@ -9,4 +9,5 @@ public class EditContactResponse {
     private String  lastName;
     private String  email;
     private String  phoneNumber;
+    private String statusMessage;
 }

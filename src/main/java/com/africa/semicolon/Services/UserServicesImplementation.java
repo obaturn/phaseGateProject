@@ -25,41 +25,68 @@ public class UserServicesImplementation implements UserService {
 
     @Override
     public UserRegisterResponse registerUser(UserRegisterRequest registrationUser) {
+        Optional<Contact> duplicateNames = userRepository.findByLastNameAndFirstName(registrationUser.getLastName(), registrationUser.getFirstName());
+        if (duplicateNames.isPresent()) {
+            throw new UserNotFoundException("User with last name " + registrationUser.getLastName()+"And user with first name" +registrationUser.getFirstName()+ " already exists");
+        }
+
+        if (registrationUser.getPhoneNumber().length() != 11) {
+            throw new UserAlreadyExistException("Dear Sir or Ma, your phone number must be exactly 11 digits long");
+        }
+
+        if (registrationUser.getPassword().length() != 6) {
+            throw new LoginUserException("Password must be exactly 6 digits long");
+        }
+
         User user = new User();
         user.setEmail(registrationUser.getEmail());
         user.setFirstName(registrationUser.getFirstName());
         user.setLastName(registrationUser.getLastName());
         user.setPhoneNumber(registrationUser.getPhoneNumber());
-          user.setPassword(registrationUser.getPassword());
-        user.setUserName(registrationUser.getUserName());
+        user.setPassword(registrationUser.getPassword());
+        user.setUsername(registrationUser.getUsername());
+
         userRepository.save(user);
+
         UserRegisterResponse response = new UserRegisterResponse();
         response.setMessage(" you have been successfully registered");
-        response.setUser_id(user.getId());
-        response.setUserName(registrationUser.getUserName());
-        return response;
-    }
+        response.setUserName(user.getUsername());
+        response.setFirstname(user.getFirstName());
+        response.setLastname(user.getLastName());
+        response.setPhoneNumber(user.getPhoneNumber());
+        response.setEmail(user.getEmail());
+        response.setStatusMessage("registration successful");
 
+        return response;
+
+    }
     @Override
-    public UserFindByIdResponse userFindById(UserFindByIdRequest userFindByIdRequest) {
-        Optional<User> user = userRepository.findById(userFindByIdRequest.getId());
+    public UserFindByEmailResponse userFindByEmail(UserFindByEmailRequest emailRequest) {
+
+        Optional<User> user = userRepository.findByEmail(emailRequest.getEmail());
         if (user.isPresent()) {
-            UserFindByIdResponse response = new UserFindByIdResponse();
-            response.setMessage("User found with Id"+userFindByIdRequest.getId());
+            UserFindByEmailResponse response = new UserFindByEmailResponse();
+            response.setMessage("user found with email"+user.get().getEmail());
             return response;
         } else {
-            throw new UserNotFoundException(userFindByIdRequest.getId());
+            throw new UserNotFoundException("user not found with email"+emailRequest.getEmail());
         }
 
     }
 
     @Override
     public UserLoginResponse userLogin(UserLoginRequest login) {
-        User user = userRepository.findByUserName(login.getUserName());
+        User user = userRepository.findByUsername(login.getUserName());
         if (!user.getPassword().equals(login.getPassword())) {
             throw new LoginUserException("incorrect password");
-        }else {
-            user.setUserName(login.getUserName());
+        }
+        if(login.getPassword().length() != 6){
+            throw new LoginUserException("password too short it must be 6 digit");
+        }
+
+
+        else {
+            user.setUsername(login.getUserName());
             user.setPassword(login.getPassword());
             user.setLogin(true);
             userRepository.save(user);
@@ -71,40 +98,43 @@ public class UserServicesImplementation implements UserService {
 
     @Override
     public UserUpdateResponse updateUser(UserUpdateRequest updateUser) {
-        User user = userRepository.findById(updateUser.getUpdateId()).orElse(null);
-        if (user == null) {
+        Optional<User> optionalUser = userRepository.findByPhoneNumber(updateUser.getPhoneNumber());
+        if (optionalUser.isEmpty()) {
             throw new UpdateCannotBeDone("user not found");
-
-        } else{
+        } else {
+            User user = optionalUser.get();
             user.setFirstName(updateUser.getFirstName());
             user.setLastName(updateUser.getLastName());
             user.setPhoneNumber(updateUser.getPhoneNumber());
             userRepository.save(user);
+
             UserUpdateResponse response = new UserUpdateResponse();
             response.setMessage("user updated successfully");
-            response.setId(user.getId());
             response.setFirstName("you have updated the first name");
+            response.setLastName("you have updated the last name");
             return response;
-
+        }
         }
 
-    }
+
 
     @Override
     public UserAddContactResponse userCannotAddAContactWithTheSamePhoneNumber(AddContactRequest addingContact) {
         Optional<User> existingUser = userRepository.findByPhoneNumber(addingContact.getPhoneNumber());
         if (existingUser.isPresent()) {
-            throw new UserAlreadyExistException("User already exist with this phoneNumber");
+            throw new UserAlreadyExistException("User already exists with this phone number");
         } else {
             User user = new User();
             user.setFirstName(addingContact.getFirstName());
             user.setLastName(addingContact.getLastName());
             user.setPhoneNumber(addingContact.getPhoneNumber());
             userRepository.save(user);
+
             UserAddContactResponse response = new UserAddContactResponse();
             response.setMessage("Contact added successfully");
             return response;
         }
+
     }
 
     @Override
@@ -123,4 +153,8 @@ public class UserServicesImplementation implements UserService {
 
         return response;
     }
+
+
+
+
 }

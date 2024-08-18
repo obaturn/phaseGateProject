@@ -17,9 +17,10 @@ public class User {
     private String lastName;
     private String email;
     private String phoneNumber;
-    private String userName;
-    private String Password;
+    private String username;
+    private String password;
     private boolean login;
+    private String gender;
     @DBRef
     private List<Contact> contactList = new ArrayList<Contact>();
 

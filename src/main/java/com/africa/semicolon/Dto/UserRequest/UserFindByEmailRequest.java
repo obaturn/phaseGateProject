@@ -3,7 +3,7 @@ package com.africa.semicolon.Dto.UserRequest;
 import lombok.Data;
 
 @Data
-public class UserFindByIdRequest {
+public class UserFindByEmailRequest {
     private String id;
     private String name;
     private String email;

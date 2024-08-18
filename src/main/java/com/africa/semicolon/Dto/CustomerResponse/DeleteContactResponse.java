@@ -8,5 +8,6 @@ public class DeleteContactResponse {
     private String firstName;
     private String Email;
     private String PhoneNumber;
+    private String statusMessage;
 
 }
